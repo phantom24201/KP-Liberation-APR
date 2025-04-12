@@ -14,7 +14,7 @@ jobs:
     steps:
       # Checkout the selected branch from the manual input
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           ref: ${{ github.event.inputs.branch }}  # Use the branch provided by the manual trigger
 
@@ -29,7 +29,7 @@ jobs:
         working-directory: _tools/build-tool
         run: npx gulp
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@master
         with:
           name: PBO-Files
           path: build/pbo
