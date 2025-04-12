@@ -65,6 +65,32 @@ KPLIB_objectInits = [
             };
         }
     ],
+    //arsenal code
+    [
+        [KPLIB_b_arsenal],
+        {
+            [_this] spawn {
+                params ["_arsenal"];
+                waitUntil {sleep 0.1; time > 0};
+                if (KPLIB_ace && KPLIB_param_arsenalType) then {
+                    [_arsenal, true] remoteExecCall ["ace_arsenal_fnc_initBox", 0, _arsenal];
+                } else {
+                    ["AmmoboxInit", [_arsenal, true]] spawn BIS_fnc_arsenal;
+                };
+            };
+        }
+    ],
+    [
+        [KPLIB_b_fobBuilding],
+        {
+            _this addEventHandler ["HandleDamage", {0}];
+            [_this] spawn {
+                params ["_fob"];
+                waitUntil {sleep 0.1; time > 0};
+                [_fob] remoteExecCall ["KPLIB_fnc_addActionsFob", 0, _fob];
+            };
+        }
+    ],
 
     // Add ViV action to Arsenal crate
     [
