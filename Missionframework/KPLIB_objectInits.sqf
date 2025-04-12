@@ -149,47 +149,38 @@ KPLIB_objectInits = [
     [
         KPLIB_param_supportModule_artyVeh,
         {
-            if (KPLIB_param_supportModule > 0) then {
-                [_this] spawn {
-                    params ["_arty"];
-                    waitUntil {sleep 0.1; time > 0};
-                    [_arty] remoteExecCall ["KPLIB_fnc_addArtyToSupport", 0, _arty];
+            if (KPLIB_param_supportModule > 0) then {KPLIB_param_supportModule_arty synchronizeObjectsAdd [_this];};
+            // ---------------------------------------------------------- COUNTER-ARTILLERY MANAGEMENT
+            _this addEventHandler ["Fired", {
+                params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+                
+                if (side _gunner == KPLIB_side_player) then {
+
+                    // Check artillery fired ammo
+                    if (getNumber(configFile >> "CfgAmmo" >> _ammo >> "artilleryLock") < 1) exitWith {};
+
+                    // Check if the enemy artillery is available
+                    if (isNil "KPLIB_o_artilleryUnits") exitWith {};
+                    if (KPLIB_o_artilleryUnits isEqualTo []) exitWith {};
+                    // Add Deleted EH to the projectile. When explodes, run the counter artillery script
+                    [_projectile, "Explode", {
+                        params ["_projectile", "_pos", "_velocity"];
+                        [_thisArgs, _pos] remoteExec ["KPLIB_fnc_counterArtillery", 2];
+                    }, _unit] call CBA_fnc_addBISEventHandler;
+
+                    // Add EH for shells that creates submunitions
+                    _unit setVariable ["KPLIB_count_subMunition", 0]; // To avoid calling the counter script multiple times
+                    [_projectile, "SubmunitionCreated", {
+                        params ["_projectile", "_submunitionProjectile", "_pos", "_velocity"];
+                        _countSubMunition = (_thisArgs getVariable "KPLIB_count_subMunition");
+                        _countSubMunition = _countSubMunition + 1;
+
+                        if (_countSubMunition > 1) exitWith {};
+                        
+                        [_thisArgs, _pos] remoteExec ["KPLIB_fnc_counterArtillery", 2];
+                    }, _unit] call CBA_fnc_addBISEventHandler;
                 };
-            };
-        }
-    ],
-
-    // add fullheal action to huron/taru medical container (mobile fullHeal)
-    [
-        ["B_Slingload_01_Medevac_F", "Land_Pod_Heli_Transport_04_medevac_F"],
-        {
-            [_this] spawn {
-                params ["_medvacbox"];
-                waitUntil {sleep 0.1; time > 0};
-                [_medvacbox] remoteExecCall ["KPLIB_fnc_addActionsFullHeal", 0, _medvacbox];
-            };
-        }
-    ],
-
-    // Add KPLQ Radio to static radios
-    [
-        ["Land_FMradio_F", "Land_SurvivalRadio_F", "CUP_radio_b", "Radio", "Radio_Old"],
-        {
-            if (KPLIB_klpq) then {
-                [_this] spawn {
-                    params ["_radio"];
-                    waitUntil {sleep 0.1; time > 0};
-                    [_radio, false] remoteExecCall ["klpq_musicRadio_fnc_addRadio", 0, _radio];
-                };
-            };
-        }
-    ],
-
-    // Set MH47 Probe
-    [
-        ["CUP_B_MH47E_USA"],
-        {
-            [_this,nil,["Hide_Probe",0]] call BIS_fnc_initVehicle;
+            }];
         }
     ],
 
@@ -203,5 +194,39 @@ KPLIB_objectInits = [
             _this allowFleeing 0;
         },
         true
-    ]
+    ],
+    {
+            if (KPLIB_param_supportModule > 0) then {KPLIB_param_supportModule_arty synchronizeObjectsAdd [_this];};
+            // ---------------------------------------------------------- COUNTER-ARTILLERY MANAGEMENT
+            _this addEventHandler ["Fired", {
+                params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+                
+                if (side _gunner == KPLIB_side_player) then {
+
+                    // Check artillery fired ammo
+                    if (getNumber(configFile >> "CfgAmmo" >> _ammo >> "artilleryLock") < 1) exitWith {};
+
+                    // Check if the enemy artillery is available
+                    if (isNil "KPLIB_o_artilleryUnits") exitWith {};
+                    if (KPLIB_o_artilleryUnits isEqualTo []) exitWith {};
+                    // Add Deleted EH to the projectile. When explodes, run the counter artillery script
+                    [_projectile, "Explode", {
+                        params ["_projectile", "_pos", "_velocity"];
+                        [_thisArgs, _pos] remoteExec ["KPLIB_fnc_counterArtillery", 2];
+                    }, _unit] call CBA_fnc_addBISEventHandler;
+
+                    // Add EH for shells that creates submunitions
+                    _unit setVariable ["KPLIB_count_subMunition", 0]; // To avoid calling the counter script multiple times
+                    [_projectile, "SubmunitionCreated", {
+                        params ["_projectile", "_submunitionProjectile", "_pos", "_velocity"];
+                        _countSubMunition = (_thisArgs getVariable "KPLIB_count_subMunition");
+                        _countSubMunition = _countSubMunition + 1;
+
+                        if (_countSubMunition > 1) exitWith {};
+                        
+                        [_thisArgs, _pos] remoteExec ["KPLIB_fnc_counterArtillery", 2];
+                    }, _unit] call CBA_fnc_addBISEventHandler;
+                };
+            }];
+        }
 ];

@@ -150,6 +150,74 @@ KPLIB_o_planes = [
     "O_Plane_Fighter_02_F"                                              // To-201 Shikra
 ];
 
+// Enemy artilley units
+KPLIB_o_artilleryLight = [
+    [
+        "O_Mortar_01_F",                                                 //Mk6 mortar
+        // Available ammunition for this Artillery (use the export_artyPreset.sqf file to get the classnames in order)
+        // Default ammunition is mandatory
+        [
+            
+            "8Rnd_82mm_Mo_shells",                                       // Default Ammunition - Generally HE
+            "8Rnd_82mm_Mo_Smoke_white",                                  // Smoke
+            "8Rnd_82mm_Mo_Flare_white",                                  // Flare
+            "",                                                          // Cluster
+            ""                                                           // Laser Guided
+        ]
+    ]                                                     
+];
+
+KPLIB_o_artilleryHeavy = [
+    [
+        // Artillery
+        "O_MBT_02_arty_F",                                                //2S9 Sochor
+        // Available ammunition for this Artillery (use the export_artyPreset.sqf file to get the classnames in order)
+        // Default ammunition is mandatory
+        [
+            
+            "32Rnd_155mm_Mo_shells_O",                                     // Default Ammunition - Generally HE
+            "6Rnd_155mm_Mo_smoke_O",                                       // Smoke
+            "",                                                            // Flare
+            "2Rnd_155mm_Mo_Cluster_O",                                     // Cluster
+            "4Rnd_155mm_Mo_LG_O"                                           // LG
+        ]
+    ]
+];
+
+// Enemy artilley units
+KPLIB_o_artilleryLight = [
+    [
+        "O_Mortar_01_F",                                                 //Mk6 mortar
+        // Available ammunition for this Artillery (use the export_artyPreset.sqf file to get the classnames in order)
+        // Default ammunition is mandatory
+        [
+            
+            "8Rnd_82mm_Mo_shells",                                       // Default Ammunition - Generally HE
+            "8Rnd_82mm_Mo_Smoke_white",                                  // Smoke
+            "8Rnd_82mm_Mo_Flare_white",                                  // Flare
+            "",                                                          // Cluster
+            ""                                                           // Laser Guided
+        ]
+    ]                                                     
+];
+
+KPLIB_o_artilleryHeavy = [
+    [
+        // Artillery
+        "O_MBT_02_arty_F",                                                //2S9 Sochor
+        // Available ammunition for this Artillery (use the export_artyPreset.sqf file to get the classnames in order)
+        // Default ammunition is mandatory
+        [
+            
+            "32Rnd_155mm_Mo_shells_O",                                     // Default Ammunition - Generally HE
+            "6Rnd_155mm_Mo_smoke_O",                                       // Smoke
+            "",                                                            // Flare
+            "2Rnd_155mm_Mo_Cluster_O",                                     // Cluster
+            "4Rnd_155mm_Mo_LG_O"                                           // LG
+        ]
+    ]
+];
+
 // Enemy defence turrets that will be spawned in sectors.
 KPLIB_o_turrets_HMG = [
     "O_HMG_01_F",

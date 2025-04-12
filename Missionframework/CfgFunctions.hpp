@@ -1,7 +1,8 @@
 class KPLIB {
     class functions {
         file = "functions";
-
+        
+        class aceCheckUnitUnconscious   {};
         class addActionsFob             {};
         class addActionsFullHeal        {};
         class addActionsPlayer          {};
@@ -25,6 +26,8 @@ class KPLIB {
         class createManagedUnit         {};
         class crGetMulti                {};
         class crGlobalMsg               {};
+        class despawnGroup              {};
+        class despawnObject             {};
         class doSave                    {};
         class fullHeal                  {};
         class fillStorage               {};

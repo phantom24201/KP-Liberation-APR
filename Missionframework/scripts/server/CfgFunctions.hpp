@@ -18,3 +18,24 @@ class server_support {
 
     class createSuppModules             {};
 };
+
+class server_artillery {
+    file = "scripts\server\artillery";
+    
+class addMagazinesMortar            {};
+    class artilleryFobFiring            {};
+    class artilleryFobTargeting         {};
+    class artilleryPositionManager      {};
+    class artillerySpawnPosition        {};
+    class artillerySupRequest           {};
+    class artilleryTimerSpawn           {};
+    class counterArtillery              {};
+    class createLaserTarget             {};
+    class fireArtillery                 {};
+    class getArtilleryRanges            {};
+    class getArtySpawnPoint             {};
+    class getNearestArtillery           {};
+    class getReadyArtillery             {};
+    class grpUnitKilled                 {};
+    class spawnArtillery                {};
+}
