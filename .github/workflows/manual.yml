@@ -1,27 +1,23 @@
-name: GitHub Actions Workflow - Manual Trigger
+name: CI (Manual Trigger)
 
 on:
-  push:
-    branches:
-      - '**'  # Runs on all branches, or you can specify specific branches like 'main'
   workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to run the job on'
         required: true
-        default: 'main'
+        default: 'master'
 
 jobs:
   artifacts:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the selected branch
+      # Checkout the selected branch from the manual input
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}  # Default to 'main' if no branch is provided
+          ref: ${{ github.event.inputs.branch }}  # Use the branch provided by the manual trigger
 
-      # Setup Node.js environment
       - uses: docker://node:20-alpine
         name: Setup Node
 
@@ -33,7 +29,6 @@ jobs:
         working-directory: _tools/build-tool
         run: npx gulp
 
-      # Upload artifacts
       - uses: actions/upload-artifact@v2
         with:
           name: PBO-Files
