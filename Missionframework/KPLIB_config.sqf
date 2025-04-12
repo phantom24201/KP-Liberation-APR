@@ -383,5 +383,9 @@ KPLIB_battlegroup_clearance = [
 // Delay after death for wrecks and corpses to be deleted
 KPLIB_cleanup_delay = 1200;
 
-// Automatic refill magazines on redeploy and load arsenal. true means fill.
-KPLIB_fill_mags = true;
+// Fill magazines on loading loadout?
+KP_liberation_fill_mags = true;
+
+
+// Max radius from an object to register to find the nearest sector
+KPLIB_objectsGrabber_radius = 250;
