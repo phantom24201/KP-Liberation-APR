@@ -3,6 +3,7 @@
 
 # Tools local configs
 /_tools/config.ps1
+_tools/build
 
 # Build directory
 /build/
