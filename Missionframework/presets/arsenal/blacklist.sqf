@@ -11,7 +11,7 @@
 
 // Blacklisted item classnames
 KPLIB_arsenalBlacklist = [
-    "B_AA_01_weapon_F",
+    /*"B_AA_01_weapon_F",
     "B_AT_01_weapon_F",
     "B_GMG_01_A_weapon_F",
     "B_GMG_01_high_weapon_F",
@@ -150,5 +150,5 @@ KPLIB_arsenalBlacklist = [
     "uns_MK18_low_US_Bag",
     "uns_STABO_US_Bag",
     "uns_Tripod_Bag",
-    "Uns_US_searchlight_Bag"
+    "Uns_US_searchlight_Bag"*/
 ];
