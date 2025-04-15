@@ -1,5 +1,3 @@
-scriptName "manage_one_patrol";
-
 params [ "_minimum_readiness", "_is_infantry" ];
 private [ "_headless_client", "_grp", "_squad"];
 
@@ -18,12 +16,9 @@ while { KPLIB_endgame == 0 } do {
 
     _grp = grpNull;
 
-    private _minSpawnRange = round (KPLIB_range_pointActivation * 1.5);
-    private _maxSpawnRange = round (KPLIB_range_pointActivation * 4);
-
     _spawn_marker = "";
     while { _spawn_marker == "" } do {
-        _spawn_marker = [_minSpawnRange,_maxSpawnRange,true] call KPLIB_fnc_getOpforSpawnPoint;
+        _spawn_marker = [1500,4000,true] call KPLIB_fnc_getOpforSpawnPoint;
         if ( _spawn_marker == "" ) then {
             sleep (150 + (random 150));
         };
@@ -33,15 +28,12 @@ while { KPLIB_endgame == 0 } do {
 
     if (_is_infantry) then {
 
-        private _minRange = round (KPLIB_range_pointActivation * 0.75);
-        private _maxRange = round (KPLIB_range_pointActivation * 2.5);
-
         private _sectors_spawn = [];
         {
-            if ((_sector_spawn_pos distance (markerpos _x) > _minRange) && (_sector_spawn_pos distance (markerpos _x) < _maxRange)) then {
+            if ( _sector_spawn_pos distance (markerpos _x) < 2500) then {
                 _sectors_spawn pushBack _x;
             };
-        } foreach (KPLIB_sectors_all - (KPLIB_sectors_player + KPLIB_sectors_active));
+        } foreach (KPLIB_sectors_all - KPLIB_sectors_player);
         private _sector_spawn = selectRandom _sectors_spawn;
         if (!isNil "_sector_spawn") then {_sector_spawn_pos = markerPos _sector_spawn};
 
