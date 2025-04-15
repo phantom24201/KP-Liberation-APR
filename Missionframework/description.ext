@@ -230,7 +230,7 @@ class CfgDiscordRichPresence {
 class CfgFunctions {
     #include "CfgFunctions.hpp"
     #include "KP\KPPLM\KPPLM_functions.hpp"
-	#include "vcom\cfgFunctions.hpp"
+//	#include "vcom\cfgFunctions.hpp"
 };
 
 class CfgRespawnTemplates {

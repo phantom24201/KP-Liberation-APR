@@ -127,5 +127,5 @@ if (isServer) then {
 [] execVM "VAM_GUI\VAM_GUI_init.sqf";
 
 //Exec Vcom AI function
-[] execVM "Vcom\VcomInit.sqf";
+//[] execVM "Vcom\VcomInit.sqf";
 //End of Vcom commands
