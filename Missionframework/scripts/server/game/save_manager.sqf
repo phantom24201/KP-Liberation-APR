@@ -161,6 +161,93 @@ stats_vehicles_recycled = 0;
     _x setVariable ["KPLIB_edenObject", true];
 } forEach (allMissionObjects "");
 
+fnc_addWeaponsToCargo = {
+    private _target = _this select 0;
+    private _weapons = _this select 1;
+
+    private _count = count (_weapons);
+    if (_count > 0) then {
+        for "_i" from 0 to _count - 1 do {
+            _weapon = _weapons select _i;
+            _target addWeaponWithAttachmentsCargoGlobal [_weapon, 1];
+        };
+    };
+};
+
+fnc_addMagazinesToCargo = {
+    // Todo -> Magazine Ammo Count Restoration
+
+    private _target = _this select 0;
+    private _magazines = _this select 1;
+
+    private _count = count (_magazines select 1);
+    if (_count > 0) then {
+        for "_i" from 0 to _count - 1 do {
+            _magazineName = (_magazines select 0) select _i;
+            _magazineCount = (_magazines select 1) select _i;
+            _target addMagazineCargoGlobal [_magazineName, _magazineCount];
+        }; 
+    };
+}; 
+
+fnc_addItemsToCargo = {
+    private _target = _this select 0;
+    private _items = _this select 1;
+
+    private _count = count (_items select 1);
+    if (_count > 0) then {
+        for "_i" from 0 to _count - 1 do {
+            _itemName = (_items select 0) select _i;
+            _itemCount = (_items select 1) select _i;
+            _target addItemCargoGlobal [_itemName, _itemCount];
+        };
+    };
+};
+
+fnc_addContainersToCargo = {
+    private _target = _this select 0;
+    private _containers = _this select 1;
+    private _containerCount = count _containers;
+
+    for "_i" from 0 to _containerCount - 1 do {
+        private _thisContainer = _containers select _i;
+
+        private _containerClass = _thisContainer select 0;
+        private _containerWeapons = _thisContainer select 1;
+        private _containerMagazines = _thisContainer select 2;
+        private _containerItems = _thisContainer select 3;
+
+        if (_containerClass isKindOf "bag_base") then {
+            _target addBackpackCargoGlobal [_containerClass, 1];
+        } else {
+            _target addItemCargoGlobal [_containerClass, 1];
+        };
+
+        private _containerRef = (everyContainer _target) select ((count (everyContainer _target)) -1) select 1;
+        [_containerRef, _containerWeapons] call fnc_addWeaponsToCargo;
+        [_containerRef, _containerMagazines] call fnc_addMagazinesToCargo;
+        [_containerRef, _containerItems] call fnc_addItemsToCargo;
+    };
+};
+
+fnc_loadCustomCargo = {
+    private _target = _this select 0;
+    private _weapons = (_this select 1) select 0;
+    private _magazines = (_this select 1) select 1;
+    private _items = (_this select 1) select 2;
+    private _containers = (_this select 1) select 3;
+
+    clearWeaponCargoGlobal _target;
+    clearMagazineCargoGlobal _target;
+    clearItemCargoGlobal _target;
+    clearBackpackCargoGlobal _target;
+
+    [_target, _weapons] call fnc_addWeaponsToCargo;
+    [_target, _magazines] call fnc_addMagazinesToCargo;
+    [_target, _items] call fnc_addItemsToCargo;
+    [_target, _containers] call fnc_addContainersToCargo;
+};
+
 // Get possible save data
 private _saveData = profileNamespace getVariable KPLIB_save_key;
 
@@ -321,7 +408,7 @@ if (!isNil "_saveData") then {
     private _object = objNull;
     {
         // Fetch data of saved object
-        _x params ["_class", "_pos", "_vecDir", "_vecUp", ["_hasCrew", false]];
+        _x params ["_class", "_pos", "_vecDir", "_vecUp", ["_hasCrew", false], ["_inventory", []]];
 
         // This will be removed if we reach a 0.96.7 due to more released Arma 3 DLCs until we finish 0.97.0
         if !(((_saveData select 0) select 0) isEqualType 0) then {
@@ -355,11 +442,8 @@ if (!isNil "_saveData") then {
             [_object] call KPLIB_fnc_addObjectInit;
 
             // Apply kill manager handling, if not excluded
-            if !((toLower _class) in _noKillHandler) then {
-                _object addMPEventHandler ["MPKilled", {
-                    params ["_unit", "_killer"];
-                    ["KPLIB_manageKills", [_unit, _killer]] call CBA_fnc_localEvent;
-                }];
+            if !((toLowerANSI _class) in _noKillHandler) then {
+                _object addMPEventHandler ["MPKilled", {_this spawn kill_manager}];
             };
 
             // Set enemy vehicle as captured
@@ -378,6 +462,11 @@ if (!isNil "_saveData") then {
             // Add blufor crew, if it had crew or is a UAV
             if ((unitIsUAV _object) || _hascrew) then {
                 [_object] call KPLIB_fnc_forceBluforCrew;
+            };
+			
+			   // Reload inventory if necessary
+            if ((count _inventory) == 4) then {
+                [_object, _inventory] call fnc_loadCustomCargo;
             };
         };
     } forEach _objectsToSave;
@@ -516,24 +605,23 @@ publicVariable "KPLIB_sectorsUnderAttack";
 publicVariable "KPLIB_clearances";
 
 // Check for deleted military sectors or deleted classnames in the locked vehicles array
-KPLIB_vehicle_to_military_base_links = KPLIB_vehicle_to_military_base_links select {
-    _x params ["_class", "_marker"];
-    // EV which shall have already been validated, class checked, cross checked with build
-    _class in KPLIB_b_vehToUnlock
-        && {_marker in KPLIB_sectors_military};
-};
+KPLIB_vehicle_to_military_base_links = KPLIB_vehicle_to_military_base_links select {((_x select 0) in KPLIB_b_vehToUnlock) && ((_x select 1) in KPLIB_sectors_military)};
+
+// Remove links for vehicles of possibly removed mods
+KPLIB_vehicle_to_military_base_links = KPLIB_vehicle_to_military_base_links select {[_x select 0] call KPLIB_fnc_checkClass};
 
 // Check for additions in the locked vehicles array
 private _lockedVehCount = count KPLIB_vehicle_to_military_base_links;
 if ((_lockedVehCount < (count KPLIB_sectors_military)) && (_lockedVehCount < (count KPLIB_b_vehToUnlock))) then {
+    private _assignedVehicles = [];
     private _assignedBases = [];
     private _nextVehicle = "";
     private _nextBase = "";
 
-    private _assignedVehicles = KPLIB_vehicle_to_military_base_links apply {
+    {
+        _assignedVehicles pushBack (_x select 0);
         _assignedBases pushBack (_x select 1);
-        (_x select 0);
-    };
+    } forEach KPLIB_vehicle_to_military_base_links;
 
     // Add new entries, when there are elite vehicles and military sectors are not yet assigned
     while {((count _assignedVehicles) < (count KPLIB_b_vehToUnlock)) && ((count _assignedBases) < (count KPLIB_sectors_military))} do {
