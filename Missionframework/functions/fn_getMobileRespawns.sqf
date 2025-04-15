@@ -24,6 +24,6 @@ private _respawn_trucks = vehicles select {
 	&& {(_x distance2d ([getPos _x] call KPLIB_fnc_getNearestFob)) > KPLIB_range_fob} 
 	} && 
 	{abs (speed _x) < 5} 
-}
+};
 
 [_respawn_trucks, [], {(getPos _x) select 0}, 'ASCEND'] call BIS_fnc_sortBy
