@@ -1,69 +1,92 @@
-params ["_first_objective"];
+/*
+    File: fn_spawnVehicle.sqf
+    Author: KP Liberation Dev Team - https://github.com/KillahPotatoes
+    Date: 2019-12-03
+    Last Update: 2024-11-16
+    License: MIT License - http://www.opensource.org/licenses/MIT
 
-if (KPLIB_o_planes isEqualTo []) exitWith {false};
+    Description:
+        Spawns a vehicle with all needed Liberation connections/dependencies.
 
-private _planes_number = ((floor linearConversion [40, 100, KPLIB_enemyReadiness, 1, 3]) min 3) max 0;
+    Parameter(s):
+        _pos        - Position to spawn the vehicle                                         [POSITION, defaults to [0, 0, 0]]
+        _classname  - Classname of the vehicle to spawn                                     [STRING, defaults to ""]
+        _precise    - Selector if the vehicle should spawned precisely on given position    [BOOL, defaults to false]
+        _rndDir     - Selector if the direction should be randomized                        [BOOL, defaults to true]
 
-if (_planes_number < 1) exitWith {};
+    Returns:
+        Spawned vehicle [OBJECT]
+*/
 
-private _class = selectRandom KPLIB_o_planes;
-private _spawnPoint = ([KPLIB_sectors_airSpawn, [_first_objective], {(markerPos _x) distance _input0}, "ASCEND"] call BIS_fnc_sortBy) select 0;
-private _spawnPos = [];
-private _plane = objNull;
-private _grp = createGroup [KPLIB_side_enemy, true];
+params [
+    ["_pos", [0, 0, 0], [[]], [2, 3]],
+    ["_classname", "", [""]],
+    ["_precise", false, [false]],
+    ["_rndDir", true, [false]]
+];
 
-for "_i" from 1 to _planes_number do {
-    _spawnPos = markerPos _spawnPoint;
-    _spawnPos = [(((_spawnPos select 0) + 500) - random 1000), (((_spawnPos select 1) + 500) - random 1000), 200];
-    _plane = createVehicle [_class, _spawnPos, [], 0, "FLY"];
-    createVehicleCrew _plane;
-    _plane flyInHeight (120 + (random 180));
-    [_plane] call KPLIB_fnc_addObjectInit;
+if (_pos isEqualTo [0, 0, 0]) exitWith {["No or zero pos given"] call BIS_fnc_error; objNull};
+if (_classname isEqualTo "") exitWith {["Empty string given"] call BIS_fnc_error; objNull};
+//if (!canSuspend) exitWith {_this spawn KPLIB_fnc_spawnVehicle};
 
-    _plane addMPEventHandler ["MPKilled", {
-        params ["_unit", "_killer"];
-        ["KPLIB_manageKills", [_unit, _killer]] call CBA_fnc_localEvent;
-    }];
-    {
-        _x addMPEventHandler ["MPKilled", {
-            params ["_unit", "_killer"];
-            ["KPLIB_manageKills", [_unit,_killer]] call CBA_fnc_localEvent;
-        }];
-    } forEach (crew _plane);
+private _newvehicle = objNull;
+private _spawnpos = [];
 
-    (crew _plane) joinSilent _grp;
-    sleep 1;
+if (_precise) then {
+    // Directly use given pos, if precise placement is true
+    _spawnpos = _pos;
+} else {
+    // Otherwise find a suitable position for vehicle spawning near given pos
+    private _i = 0;
+    while {_spawnPos isEqualTo []} do {
+        _i = _i + 1;
+        _spawnpos = (_pos getPos [random 150, random 360]) findEmptyPosition [10, 100, _classname];
+        if (_i isEqualTo 10) exitWith {_spawnpos = (_pos getPos [random 150, random 360]) findEmptyPosition [0, 100, _classname];};
+    };
 };
 
-{ deleteWaypoint _x } forEachReversed waypoints _grp;
-sleep 1;
-{_x doFollow leader _grp} forEach (units _grp);
-sleep 1;
-
-private _waypoint = _grp addWaypoint [_first_objective, 500];
-_waypoint setWaypointType "MOVE";
-_waypoint setWaypointSpeed "FULL";
-_waypoint setWaypointBehaviour "AWARE";
-_waypoint setWaypointCombatMode "RED";
-
-_waypoint = _grp addWaypoint [_first_objective, 500];
-_waypoint setWaypointType "MOVE";
-_waypoint setWaypointSpeed "FULL";
-_waypoint setWaypointBehaviour "AWARE";
-_waypoint setWaypointCombatMode "RED";
-
-_waypoint = _grp addWaypoint [_first_objective, 500];
-_waypoint setWaypointType "MOVE";
-_waypoint setWaypointSpeed "FULL";
-_waypoint setWaypointBehaviour "AWARE";
-_waypoint setWaypointCombatMode "RED";
-
-for "_i" from 1 to 6 do {
-    _waypoint = _grp addWaypoint [_first_objective, 500];
-    _waypoint setWaypointType "SAD";
+if (_spawnPos isEqualTo []) exitWith {
+    ["No suitable spawn position found."] call BIS_fnc_error;
+    [format ["Couldn't find spawn position for %1 around position %2", _classname, _pos], "WARNING"] call KPLIB_fnc_log;
+    objNull
 };
 
-_waypoint = _grp addWaypoint [_first_objective, 500];
-_waypoint setWaypointType "CYCLE";
+// If it's a chopper, spawn it flying
+if (_classname in KPLIB_o_helicopters) then {
+    _newvehicle = createVehicle [_classname, _spawnpos, [], 0, 'FLY'];
+    _newvehicle flyInHeight (80 + (random 120));
+    _newvehicle allowDamage false;
+} else {
+    _newvehicle = _classname createVehicle _spawnpos;
+    _newvehicle allowDamage false;
 
-_grp setCurrentWaypoint [_grp, 2];
+    [_newvehicle] call KPLIB_fnc_allowCrewInImmobile;
+
+    // Randomize direction and reset position and vector
+    if (_rndDir) then {
+        _newvehicle setDir (random 360);
+    };
+    _newvehicle setPos _spawnpos;
+    _newvehicle setVectorUp surfaceNormal position _newvehicle;
+};
+
+// Clear cargo, if enabled
+[_newvehicle] call KPLIB_fnc_clearCargo;
+_newvehicle addItemCargoGlobal ["toolkit", 1];
+// Process KP object init
+[_newvehicle] call KPLIB_fnc_addObjectInit;
+
+// Spawn crew of vehicle
+if (_classname in KPLIB_o_militiaVehicles) then {
+    [_newvehicle] call KPLIB_fnc_spawnMilitiaCrew;
+} else {
+    [_newvehicle, KPLIB_side_enemy] call KPLIB_fnc_createCrew;
+};
+
+// Add MPKilled and GetIn EHs and enable damage again
+_newvehicle addMPEventHandler ["MPKilled", {_this spawn kill_manager}];
+sleep 0.1;
+_newvehicle allowDamage true;
+_newvehicle setDamage 0;
+
+_newvehicle
