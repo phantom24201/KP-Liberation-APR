@@ -267,7 +267,7 @@ class Params {
         title = $STR_PARAMS_FOBFULLHEAL_CHECKENEMIES;
         values[] = {0, 1};
         texts[] = {$STR_PARAMS_DISABLED, $STR_PARAMS_ENABLED};
-        default = 1;
+        default = 0;
     };
     class FOBFullHealCooldown {
         title = $STR_PARAMS_FOBFULLHEAL_COOLDOWN;
