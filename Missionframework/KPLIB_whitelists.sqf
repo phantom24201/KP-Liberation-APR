@@ -28,7 +28,7 @@ KPLIB_whitelist_cmdrSlot = [
 
 // Access the commander actions (rights, production, etc.), even if the corresponding player is not in the commander slot.
 KPLIB_whitelist_cmdrActions = [
-    "76561199554867806" //Phantom
+    "76561199554867806", //Phantom
     "76561198983716957", //Brenner
     "76561198856878016" //Coconut
 
