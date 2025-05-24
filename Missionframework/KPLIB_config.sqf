@@ -370,7 +370,7 @@ KPLIB_defended_buildingpos_part = 0.6;
 KPLIB_vulnerability_timer = 2700;
 
 // Chance that enemy infantry will surrender after heavy losses are encountered.
-KPLIB_surrender_chance = 45;
+KPLIB_surrender_chance = 55;
 
 // When playing on this map, it'll create a clearance (remove terrain objects) in a 15m radius around the battlegroup/reinforcements spawnpoint.
 KPLIB_battlegroup_clearance = [
