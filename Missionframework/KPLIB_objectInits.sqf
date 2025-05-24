@@ -65,7 +65,21 @@ KPLIB_objectInits = [
             };
         }
     ],
-
+        //ace box arsenal
+    [
+        [KPLIB_b_arsenal],
+        {
+            [_this] spawn {
+                params ["_arsenal"];
+                waitUntil {sleep 0.1; time > 0};
+                if (KPLIB_ace && KPLIB_param_arsenalType) then {
+                    [_arsenal, true] remoteExecCall ["ace_arsenal_fnc_initBox", 0, _arsenal];
+                } else {
+                    ["AmmoboxInit", [_arsenal, true]] spawn BIS_fnc_arsenal;
+                };
+            };
+        }
+    ],
     // Add ViV action to Arsenal crate
     [
         [KPLIB_b_arsenal],
@@ -150,10 +164,16 @@ KPLIB_objectInits = [
         KPLIB_param_supportModule_artyVeh,
         {
             if (KPLIB_param_supportModule > 0) then {
-                [_this] spawn {
+                [_this] spawn { 
                     params ["_arty"];
                     waitUntil {sleep 0.1; time > 0};
                     [_arty] remoteExecCall ["KPLIB_fnc_addArtyToSupport", 0, _arty];
+                    // i copied this from from ur script
+                    // Infinite ammo
+                    _this addEventHandler ["Fired",{
+                        params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+                        [_unit,	_magazine] call CBA_fnc_addMagazine;
+                    }];
                 };
             };
         }
