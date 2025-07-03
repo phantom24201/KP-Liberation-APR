@@ -97,7 +97,11 @@ _player addAction [
         && {build_confirmed isEqualTo 0}
     "
 ];
-
+//Arsenal Option Will Be always abv at OB but at FOB & MSPs They would need to use the arsenal crates
+//OLD CODE
+//            _originalTarget getVariable ['KPLIB_fobDist', 99999] < 20
+//            || {_originalTarget getVariable ['KPLIB_isNearArsenal', false]}
+//            || {_originalTarget getVariable ['KPLIB_isNearMobRespawn', false]}
 // Arsenal
 _player addAction [
     ["<t color='#FFFF00'>", localize "STR_ARSENAL_ACTION", "</t><img size='2' image='res\ui_arsenal.paa'/>"] joinString "",
@@ -110,12 +114,7 @@ _player addAction [
     "
         isNull (objectParent _originalTarget)
         && {alive _originalTarget}
-        && {
-            _originalTarget getVariable ['KPLIB_fobDist', 99999] < 20
-            || {_originalTarget getVariable ['KPLIB_isNearArsenal', false]}
-            || {_originalTarget getVariable ['KPLIB_isNearMobRespawn', false]}
-            || {_originalTarget getVariable ['KPLIB_isNearStart', false]}
-        }
+        && {_originalTarget getVariable ['KPLIB_isNearStart', false]}
         && {build_confirmed isEqualTo 0}
     "
 ];

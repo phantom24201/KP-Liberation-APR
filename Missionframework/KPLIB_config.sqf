@@ -53,7 +53,7 @@
     29 = SFP (Desert)
     30 = LDF (Contact DLC)
 */
-KPLIB_presetPlayer = 0;
+KPLIB_presetPlayer = 24;
 
 /*
     ----- Enemy preset -----
@@ -79,7 +79,7 @@ KPLIB_presetPlayer = 0;
     19 = CUP British Armed Forces (Desert)
     20 = CUP British Armed Forces (Woodland)
 */
-KPLIB_presetEnemy = 0;
+KPLIB_presetEnemy = 18;
 
 /*
     ----- Resistance preset -----
@@ -93,7 +93,7 @@ KPLIB_presetEnemy = 0;
     7  = CUP Takistani Locals
     8  = CUP National Party of Chernarus
 */
-KPLIB_presetResistance = 0;
+KPLIB_presetResistance = 8;
 
 /*
     ----- Civilians preset -----
@@ -106,7 +106,7 @@ KPLIB_presetResistance = 0;
     6  = CUP Takistani Civilians
     7  = CUP Chernarussian Civilians
 */
-KPLIB_presetCivilians = 0;
+KPLIB_presetCivilians = 7;
 
 /*
     ----- Arsenal preset -----
@@ -169,7 +169,7 @@ KPLIB_save_key = "KP_LIBERATION_" + (toUpperANSI worldName) + "_SAVEGAME";
 KPLIB_save_paramKey = "KP_LIBERATION_" + (toUpperANSI worldName) + "_SAVE_PARAMS";
 
 // Interval in seconds for automatic save.
-KPLIB_save_interval = 60;
+KPLIB_save_interval = 120;
 
 
 /*
@@ -180,29 +180,29 @@ KPLIB_save_interval = 60;
 */
 
 // Build range around the main FOB building.
-KPLIB_range_fob = 125;
+KPLIB_range_fob = 300;
 
 // Altitude in metres for the HALO jump.
-KPLIB_height_halo = 2500;
+KPLIB_height_halo = 1000;
 
 // Range to activate a sector.
 KPLIB_range_sectorActivation   = 1000;
 KPLIB_range_capitalActivation  = 1250;
 KPLIB_range_cityActivation     = 1000;
-KPLIB_range_factoryActivation  = 750;
+KPLIB_range_factoryActivation  = 1000;
 KPLIB_range_militaryActivation = 1500;
 KPLIB_range_towerActivation    = 500;
 KPLIB_range_airSpawnActivation = 1500;
 KPLIB_range_pointActivation    = 1000;
 
 // Range to capture a sector.
-KPLIB_range_sectorCapture = 175;
+KPLIB_range_sectorCapture = 200;
 
 // Radio Tower scanning range.
 KPLIB_range_radioTowerScan = 2500;
 
 // Minimum distance to next FOB.
-KPLIB_distance_fob = 1000;
+KPLIB_distance_fob = 800;
 
 // Minimum distance to next sector.
 KPLIB_distance_sector = KPLIB_range_sectorCapture + KPLIB_range_fob;
@@ -231,7 +231,7 @@ KPLIB_cap_patrol = 150;
 KPLIB_battlegroup_size = 6;
 
 // Cap for civilian vehicles traveling between sectors.
-KPLIB_civilians_amount = 10;
+KPLIB_civilians_amount = 7;
 
 
 /*
@@ -254,7 +254,7 @@ KPLIB_cr_vehicle_penalty = 2;
 KPLIB_cr_resistance_penalty = 3;
 
 // Civil Reputation gain for liberate a sector.
-KPLIB_cr_sector_gain = 5;
+KPLIB_cr_sector_gain = 8;
 
 // Chance (0-100) that there are wounded civilians right after capturing a sector.
 KPLIB_cr_wounded_chance = 35;
@@ -277,10 +277,10 @@ KPLIB_cr_wounded_gain = 2;
 KPLIB_secondary_missions_costs = [15, 10, 8, 8, 8, 8];
 
 // Proportionate reduction of the actual (!) enemy combat readiness for a successful FOB hunt. (e.g. 0.4 -> reduction of 24 by an actual value of 60)
-KPLIB_secondary_objective_impact = 0.4;
+KPLIB_secondary_objective_impact = 0.6;
 
 // The percentage increase received when completing a Humanitarian Aid secondary objective
-KPLIB_secondary_objective_civ_supplies_impact = 10;
+KPLIB_secondary_objective_civ_supplies_impact = 15;
 
 // Minimum time until a civil Informant can spawn. (seconds, default 30 min)
 KPLIB_civinfo_min = 1800;
@@ -289,7 +289,7 @@ KPLIB_civinfo_min = 1800;
 KPLIB_civinfo_max = 3600;
 
 // Civil Informant spawn chance. (0-100)
-KPLIB_civinfo_chance = 75;
+KPLIB_civinfo_chance = 50;
 
 // Intel gain for talking to a civil informant.
 KPLIB_civinfo_intel = 10;
@@ -329,7 +329,7 @@ KPLIB_fuel_max = 45;
 */
 
 // Chance (0-100) that a logistic convoy will be ambushed, when civil reputation is low. (Checked every minute)
-KPLIB_convoy_ambush_chance = 2;
+KPLIB_convoy_ambush_chance = 10;
 
 // Duration of the convoy ambush event until nothing can be retrieved. (seconds)
 KPLIB_convoy_ambush_duration = 1200;
@@ -358,19 +358,19 @@ KPLIB_resistance_ambush_chance = 25;
 */
 
 // Time in minutes until a resource crate is produced, when resources multiplier is set to 1.
-KPLIB_production_interval = 30;
+KPLIB_production_interval = 10;
 
 // Percentage of resources you get back from recycling.
-KPLIB_recycling_percentage = 0.5;
+KPLIB_recycling_percentage = 0.7;
 
 // Multiplier for defenders in buildings.
-KPLIB_defended_buildingpos_part = 0.4;
+KPLIB_defended_buildingpos_part = 0.6;
 
 // Time in seconds how long a captured sector is vulnerable to enemy troops.
-KPLIB_vulnerability_timer = 1200;
+KPLIB_vulnerability_timer = 2700;
 
 // Chance that enemy infantry will surrender after heavy losses are encountered.
-KPLIB_surrender_chance = 80;
+KPLIB_surrender_chance = 55;
 
 // When playing on this map, it'll create a clearance (remove terrain objects) in a 15m radius around the battlegroup/reinforcements spawnpoint.
 KPLIB_battlegroup_clearance = [

@@ -104,7 +104,7 @@ if ( isServer) then {
                     _unit linkItem _x;            //  Add and automatically equip special props
                 } foreach [
                     "ItemCompass",
-                    //"ItemGPS",
+                    "ItemGPS",
                     "ItemMap",
                     "ItemWatch"
                 ];
@@ -125,3 +125,7 @@ if (isServer) then {
 
 //VAM_GUI: For changing camo and vehicle appearence without Zeus:
 [] execVM "VAM_GUI\VAM_GUI_init.sqf";
+
+//Exec Vcom AI function
+//[] execVM "Vcom\VcomInit.sqf";
+//End of Vcom commands
