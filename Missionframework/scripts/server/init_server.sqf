@@ -146,10 +146,3 @@ if (KPLIB_param_restart > 0) then {
         }
     } foreach allGroups;
 }] call CBA_fnc_addEventHandler;
-
-
-
-//add base armoryPoints
-resources_intel = resources_intel + 15;
-
-

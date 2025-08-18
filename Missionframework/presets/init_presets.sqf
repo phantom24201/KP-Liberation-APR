@@ -37,6 +37,7 @@ switch (KPLIB_presetPlayer) do {
     case 28: {[] call compile preprocessFileLineNumbers "presets\players\sfp_wdl.sqf";};
     case 29: {[] call compile preprocessFileLineNumbers "presets\players\sfp_des.sqf";};
     case 30: {[] call compile preprocessFileLineNumbers "presets\players\enoch.sqf";};
+    case 31: {[] call compile preprocessFileLineNumbers "presets\players\po_uaf.sqf";};
     default  {[] call compile preprocessFileLineNumbers "presets\players\custom.sqf";};
 };
 

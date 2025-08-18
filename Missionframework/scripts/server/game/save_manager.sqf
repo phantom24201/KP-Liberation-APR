@@ -96,7 +96,7 @@ KPLIB_sectorTowers = [];
 // Sectors under attack
 KPLIB_sectorsUnderAttack = [];
 // Global Intel resource
-resources_intel = 0;
+resources_intel = 15;
 // State if the save is fully loaded
 KPLIB_saveLoaded = false;
 

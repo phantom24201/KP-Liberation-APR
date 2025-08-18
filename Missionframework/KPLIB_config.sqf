@@ -52,8 +52,9 @@
     28 = SFP (Woodland)
     29 = SFP (Desert)
     30 = LDF (Contact DLC)
+    31 = Project OPPFOR - UKRAINE
 */
-KPLIB_presetPlayer = 24;
+KPLIB_presetPlayer = 31;
 
 /*
     ----- Enemy preset -----
@@ -79,7 +80,7 @@ KPLIB_presetPlayer = 24;
     19 = CUP British Armed Forces (Desert)
     20 = CUP British Armed Forces (Woodland)
 */
-KPLIB_presetEnemy = 18;
+KPLIB_presetEnemy = 2;
 
 /*
     ----- Resistance preset -----
@@ -93,7 +94,7 @@ KPLIB_presetEnemy = 18;
     7  = CUP Takistani Locals
     8  = CUP National Party of Chernarus
 */
-KPLIB_presetResistance = 8;
+KPLIB_presetResistance = 2;
 
 /*
     ----- Civilians preset -----
@@ -106,7 +107,7 @@ KPLIB_presetResistance = 8;
     6  = CUP Takistani Civilians
     7  = CUP Chernarussian Civilians
 */
-KPLIB_presetCivilians = 7;
+KPLIB_presetCivilians = 0;
 
 /*
     ----- Arsenal preset -----
@@ -202,10 +203,10 @@ KPLIB_range_sectorCapture = 200;
 KPLIB_range_radioTowerScan = 2500;
 
 // Minimum distance to next FOB.
-KPLIB_distance_fob = 800;
+KPLIB_distance_fob = 0;
 
 // Minimum distance to next sector.
-KPLIB_distance_sector = KPLIB_range_sectorCapture + KPLIB_range_fob;
+KPLIB_distance_sector = 0;
 
 
 /*

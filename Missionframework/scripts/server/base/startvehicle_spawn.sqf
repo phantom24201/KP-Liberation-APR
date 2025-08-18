@@ -47,6 +47,5 @@ private _veh = objNull;
     };
 } forEach [
     ["littlebird_", KPLIB_b_addHeli],
-    ["boat_", KPLIB_b_addBoat],
-    ["jet_", KPLIB_b_addJet]
+    ["boat_", KPLIB_b_addBoat]
 ];

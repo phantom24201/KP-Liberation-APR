@@ -1,14 +1,14 @@
 [
     {
-        "sourceFolder": "kp_liberation.Malden",
+        "sourceFolder": "kp_liberation.Chernarus",
         "missionName": "kp_liberation",
         "map": "Malden",
         "configFile": "KPLIB_config.sqf",
         "variables": {
-            "KPLIB_preset_blufor": 24,
-            "KPLIB_preset_opfor": 15,
-            "KPLIB_preset_resistance": 8,
-            "KPLIB_preset_civilians": 7,
+            "KPLIB_preset_blufor": 31,
+            "KPLIB_preset_opfor": 2,
+            "KPLIB_preset_resistance": 2,
+            "KPLIB_preset_civilians": 0,
             "KPLIB_arsenal": 0
         },
         "workshopId": "1737370963"
